@@ -1,7 +1,7 @@
 {
   "name": "python-docs",
   "version": "1.0.0",
-  "description": "site",
+  "description": "website",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
