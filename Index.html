@@ -1,23 +1,88 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Simple Chatbot</title>
   <style>
-    body { font-family: Arial; background: #f4f4f4; padding: 20px; }
-    #chatbox { width: 100%; max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    .message { margin: 10px 0; }
-    .user { text-align: right; color: blue; }
-    .bot { text-align: left; color: green; }
-    input[type="text"] { width: 80%; padding: 10px; }
-    button { padding: 10px; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .chat-container {
+      background: white;
+      width: 400px;
+      height: 500px;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 75%;
+    }
+
+    .user {
+      background: #dcf8c6;
+      align-self: flex-end;
+    }
+
+    .bot {
+      background: #eee;
+      align-self: flex-start;
+    }
+
+    .input-box {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      font-size: 1em;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
   </style>
 </head>
 <body>
-  <div id="chatbox">
-    <div id="messages"></div>
-    <input type="text" id="userInput" placeholder="Type your message..." />
-    <button onclick="sendMessage()">Send</button>
+
+  <div class="chat-container">
+    <div class="chat-box" id="chatBox">
+      <!-- Messages will appear here -->
+    </div>
+    <div class="input-box">
+      <input type="text" id="userInput" placeholder="Type a message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
   </div>
 
   <script>
@@ -26,29 +91,36 @@
       const message = input.value.trim();
       if (message === "") return;
 
-      addMessage("You: " + message, "user");
-      respond(message);
+      addMessage("user", message);
       input.value = "";
+
+      setTimeout(() => {
+        const reply = getBotReply(message);
+        addMessage("bot", reply);
+      }, 500);
     }
 
-    function addMessage(text, className) {
+    function addMessage(sender, text) {
+      const chatBox = document.getElementById("chatBox");
       const msgDiv = document.createElement("div");
-      msgDiv.className = "message " + className;
+      msgDiv.className = `message ${sender}`;
       msgDiv.textContent = text;
-      document.getElementById("messages").appendChild(msgDiv);
+      chatBox.appendChild(msgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function respond(userMessage) {
-      let botReply = "I'm not sure how to respond to that.";
+    function getBotReply(msg) {
+      const text = msg.toLowerCase();
 
-      const msg = userMessage.toLowerCase();
-      if (msg.includes("hello") || msg.includes("hi")) botReply = "Hello! How can I help you?";
-      else if (msg.includes("how are you")) botReply = "I'm just a bot, but I'm doing great!";
-      else if (msg.includes("bye")) botReply = "Goodbye! Have a nice day!";
-      else if (msg.includes("name")) botReply = "I'm your friendly chatbot.";
-
-      addMessage("Bot: " + botReply, "bot");
+      if (text.includes("hello") || text.includes("hi")) return "Hi there! How can I help you?";
+      if (text.includes("how are you")) return "I'm just code, but I'm feeling great!";
+      if (text.includes("name")) return "I'm a simple chatbot created by HTML, CSS & JS!";
+      if (text.includes("bye")) return "Goodbye! Have a nice day!";
+      if (text.includes("weather")) return "I'm not connected to real data yet, but it looks sunny ☀️!";
+      
+      return "Sorry, I didn't understand that.";
     }
   </script>
+
 </body>
 </html>
