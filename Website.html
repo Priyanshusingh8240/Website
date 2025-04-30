@@ -1,0 +1,54 @@
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple Chatbot</title>
+  <style>
+    body { font-family: Arial; background: #f4f4f4; padding: 20px; }
+    #chatbox { width: 100%; max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .message { margin: 10px 0; }
+    .user { text-align: right; color: blue; }
+    .bot { text-align: left; color: green; }
+    input[type="text"] { width: 80%; padding: 10px; }
+    button { padding: 10px; }
+  </style>
+</head>
+<body>
+  <div id="chatbox">
+    <div id="messages"></div>
+    <input type="text" id="userInput" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const message = input.value.trim();
+      if (message === "") return;
+
+      addMessage("You: " + message, "user");
+      respond(message);
+      input.value = "";
+    }
+
+    function addMessage(text, className) {
+      const msgDiv = document.createElement("div");
+      msgDiv.className = "message " + className;
+      msgDiv.textContent = text;
+      document.getElementById("messages").appendChild(msgDiv);
+    }
+
+    function respond(userMessage) {
+      let botReply = "I'm not sure how to respond to that.";
+
+      const msg = userMessage.toLowerCase();
+      if (msg.includes("hello") || msg.includes("hi")) botReply = "Hello! How can I help you?";
+      else if (msg.includes("how are you")) botReply = "I'm just a bot, but I'm doing great!";
+      else if (msg.includes("bye")) botReply = "Goodbye! Have a nice day!";
+      else if (msg.includes("name")) botReply = "I'm your friendly chatbot.";
+
+      addMessage("Bot: " + botReply, "bot");
+    }
+  </script>
+</body>
+</html>
